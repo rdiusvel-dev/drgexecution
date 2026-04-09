@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRG Execution — Trading Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background-color:#06080c;color:#ccd3e0;font-family:'Rajdhani',sans-serif;font-size:16px;overflow-x:hidden;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 40px;background-color:rgba(6,8,12,0.96);border-bottom:1px solid rgba(201,146,42,0.14);}
+.nav-logo{display:flex;align-items:center;gap:12px;}
+.nav-leo{width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(201,146,42,0.45);display:flex;align-items:center;justify-content:center;font-size:18px;color:#c9922a;background:linear-gradient(135deg,rgba(201,146,42,0.12),rgba(6,8,12,0.8));}
+.nav-brand{font-family:'Cinzel',serif;font-size:18px;font-weight:900;letter-spacing:5px;background:linear-gradient(135deg,#f0c060,#c9922a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-cap{font-size:9px;letter-spacing:3px;color:#2a3548;text-transform:uppercase;margin-top:-2px;}
+nav ul{display:flex;align-items:center;gap:24px;list-style:none;}
+nav ul a{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#2a3548;text-decoration:none;transition:color 0.3s;}
+nav ul a:hover{color:#f0c060;}
+.nav-btn{background:linear-gradient(135deg,#c9922a,#f0c060)!important;color:#06080c!important;font-weight:700!important;padding:9px 20px!important;border-radius:4px;letter-spacing:1.5px!important;}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:130px 24px 100px;position:relative;overflow:hidden;background-color:#06080c;}
+.hero-grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(201,146,42,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(201,146,42,0.045) 1px,transparent 1px);background-size:64px 64px;animation:gridScroll 30s linear infinite;mask-image:radial-gradient(ellipse at 50% 35%,black 15%,transparent 68%);-webkit-mask-image:radial-gradient(ellipse at 50% 35%,black 15%,transparent 68%);}
+@keyframes gridScroll{to{background-position:0 64px;}}
+.glow-top{position:absolute;width:900px;height:600px;top:-200px;left:50%;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(201,146,42,0.11) 0%,transparent 65%);pointer-events:none;animation:gPulse 6s ease-in-out infinite;z-index:0;}
+.glow-l{position:absolute;width:400px;height:400px;bottom:60px;left:-120px;background:radial-gradient(circle,rgba(56,217,245,0.06) 0%,transparent 70%);pointer-events:none;z-index:0;}
+.glow-r{position:absolute;width:350px;height:350px;bottom:40px;right:-100px;background:radial-gradient(circle,rgba(0,229,160,0.05) 0%,transparent 70%);pointer-events:none;z-index:0;}
+@keyframes gPulse{0%,100%{opacity:0.75;transform:translateX(-50%) scale(1);}50%{opacity:1;transform:translateX(-50%) scale(1.07);}}
+.hero-inner{position:relative;z-index:2;max-width:860px;width:100%;}
+.badge{display:inline-flex;align-items:center;gap:9px;background-color:rgba(201,146,42,0.07);border:1px solid rgba(201,146,42,0.2);border-radius:100px;padding:7px 20px;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#c9922a;margin-bottom:36px;animation:fd 0.7s ease both;}
+.bdot{width:7px;height:7px;border-radius:50%;background-color:#00e5a0;animation:blink 2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.1;}}
+.hero-seal{display:inline-flex;align-items:center;justify-content:center;width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,rgba(201,146,42,0.15),rgba(6,8,12,0.9));border:2px solid rgba(201,146,42,0.4);box-shadow:0 0 60px rgba(201,146,42,0.25),inset 0 0 30px rgba(201,146,42,0.06);margin:0 auto 28px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;animation:fd 0.7s ease 0.1s both;}
+.seal-leo{font-size:36px;color:#c9922a;line-height:1;filter:drop-shadow(0 0 12px rgba(201,146,42,0.5));}
+.seal-drg{font-family:'Cinzel',serif;font-size:22px;font-weight:900;letter-spacing:6px;background:linear-gradient(135deg,#f0c060,#c9922a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.seal-cap{font-size:8px;letter-spacing:4px;color:#3a4555;text-transform:uppercase;}
+.hero-hook{font-family:'Cinzel',serif;font-size:clamp(22px,4.5vw,36px);font-weight:700;color:#dde4f0;letter-spacing:0.5px;line-height:1.3;margin-bottom:8px;animation:fd 0.7s ease 0.2s both;}
+.hero-hook2{font-family:'Cinzel',serif;font-size:clamp(14px,3vw,22px);font-weight:600;letter-spacing:0.5px;line-height:1.4;margin-bottom:26px;animation:fd 0.7s ease 0.25s both;background:linear-gradient(135deg,#f0c060,#c9922a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.gold-rule{width:110px;height:1px;background:linear-gradient(90deg,transparent,#c9922a,transparent);margin:0 auto 30px;animation:fd 0.7s ease 0.28s both;}
+.hero-desc{font-size:17px;color:#3a4860;max-width:620px;margin:0 auto 52px;line-height:2;animation:fd 0.7s ease 0.32s both;}
+.hero-desc strong{color:#7888a0;font-weight:600;}
+.cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;animation:fd 0.7s ease 0.38s both;}
+.btn-gold{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#a06218,#f0c060,#c9922a);background-size:200%;color:#06080c;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:19px 46px;border-radius:4px;text-decoration:none;border:none;cursor:pointer;box-shadow:0 0 0 1px rgba(201,146,42,0.35),0 8px 36px rgba(201,146,42,0.32);transition:all 0.3s;animation:bgPan 4s ease-in-out infinite;}
+@keyframes bgPan{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(201,146,42,0.55),0 18px 54px rgba(201,146,42,0.46);}
+.btn-ghost{display:inline-flex;align-items:center;gap:10px;background:transparent;color:#3a4555;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;padding:19px 36px;border-radius:4px;border:1px solid #141826;text-decoration:none;transition:all 0.3s;}
+.btn-ghost:hover{border-color:rgba(201,146,42,0.3);color:#f0c060;}
+.cta-note{font-size:11px;letter-spacing:1px;color:#1a2535;animation:fd 0.7s ease 0.43s both;}
+.stats-bar{display:flex;max-width:680px;width:100%;margin:52px auto 0;background-color:#09090f;border:1px solid #141826;border-radius:8px;overflow:hidden;animation:fd 0.7s ease 0.48s both;}
+.stat{flex:1;padding:22px 14px;text-align:center;border-right:1px solid #141826;transition:background-color 0.3s;}
+.stat:last-child{border-right:none;}
+.stat:hover{background-color:#0d1018;}
+.sv{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:#f0c060;line-height:1;margin-bottom:5px;}
+.sl{font-size:9px;letter-spacing:2px;color:#1a2535;text-transform:uppercase;}
+@keyframes fd{from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:translateY(0);}}
+.sec-wrap{padding:100px 40px;}
+.sec-inner{max-width:1100px;margin:0 auto;}
+.sec-label{display:flex;align-items:center;gap:10px;font-size:10px;letter-spacing:4px;color:#38d9f5;text-transform:uppercase;margin-bottom:14px;}
+.sec-label::before{content:'';width:28px;height:1px;background-color:#38d9f5;opacity:0.35;}
+.sec-label.gold{color:#c9922a;}.sec-label.gold::before{background-color:#c9922a;}
+.sec-label.green{color:#00e5a0;}.sec-label.green::before{background-color:#00e5a0;}
+.sec-label.red{color:#ff3d5a;}.sec-label.red::before{background-color:#ff3d5a;}
+.sec-h{font-family:'Cinzel',serif;font-size:clamp(26px,5vw,42px);font-weight:700;letter-spacing:2px;line-height:1.2;color:#e0e6f4;margin-bottom:16px;}
+.sec-h em{font-style:normal;background:linear-gradient(135deg,#f0c060,#c9922a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sec-p{font-size:15px;color:#2a3548;line-height:1.95;max-width:560px;}
+.brokers{padding:48px 32px;background-color:#080b10;border-top:1px solid #111622;border-bottom:1px solid #111622;text-align:center;}
+.brokers-lbl{font-size:10px;letter-spacing:4px;color:#1a2535;text-transform:uppercase;margin-bottom:26px;}
+.b-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.bchip{background-color:#09090f;border:1px solid #141826;border-radius:100px;padding:8px 22px;font-size:12px;font-weight:600;letter-spacing:1.5px;color:#2a3548;transition:all 0.3s;cursor:default;}
+.bchip:hover,.bchip.on{border-color:rgba(201,146,42,0.3);color:#f0c060;background-color:rgba(201,146,42,0.05);}
+.results-bg{background-color:#06080c;border-top:1px solid #111622;}
+.result-hero{background-color:#09090f;border:1px solid #141826;border-radius:12px;padding:48px 40px;margin-bottom:28px;position:relative;overflow:hidden;}
+.result-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,229,160,0.5),transparent);}
+.result-big{font-family:'Cinzel',serif;font-size:clamp(52px,10vw,90px);font-weight:900;color:#00e5a0;line-height:1;margin-bottom:10px;text-shadow:0 0 50px rgba(0,229,160,0.22);}
+.result-sub{font-size:15px;color:#2a3548;margin-bottom:28px;letter-spacing:1px;}
+.result-meta{display:flex;gap:14px;flex-wrap:wrap;}
+.rmeta{background-color:#06080c;border:1px solid #141826;border-radius:6px;padding:14px 22px;}
+.rmeta-l{font-size:9px;letter-spacing:2px;color:#1a2535;text-transform:uppercase;margin-bottom:5px;}
+.rmeta-v{font-family:'Space Mono',monospace;font-size:14px;color:#c9922a;font-weight:700;}
+.result-quote{margin-top:28px;padding-top:24px;border-top:1px solid #141826;font-family:'Cinzel',serif;font-size:17px;color:#3a4860;line-height:1.8;font-style:italic;}
+.result-quote strong{color:#c9922a;font-style:normal;}
+.tradelog{background-color:#09090f;border:1px solid #141826;border-radius:10px;overflow:hidden;margin-bottom:16px;}
+.tlog-head{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;padding:12px 22px;border-bottom:1px solid #141826;}
+.th{font-size:9px;letter-spacing:2px;color:#1a2535;text-transform:uppercase;}
+.tlog-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;padding:15px 22px;border-bottom:1px solid #0d1018;transition:background-color 0.2s;}
+.tlog-row:last-child{border-bottom:none;}
+.tlog-row:hover{background-color:#0c1018;}
+.td{font-size:12px;color:#2a3548;letter-spacing:0.5px;}
+.td.g{color:#00e5a0;font-family:'Space Mono',monospace;font-weight:700;}
+.td.r{color:#ff3d5a;font-family:'Space Mono',monospace;font-weight:700;}
+.td.gold{color:#c9922a;}
+.dir-l{display:inline-block;padding:2px 9px;border-radius:100px;font-size:9px;font-weight:700;letter-spacing:1px;background-color:rgba(0,229,160,0.07);color:#00e5a0;}
+.dir-s{display:inline-block;padding:2px 9px;border-radius:100px;font-size:9px;font-weight:700;letter-spacing:1px;background-color:rgba(255,61,90,0.07);color:#ff3d5a;}
+.equity{background-color:#09090f;border:1px solid #141826;border-radius:10px;padding:28px 28px 18px;}
+.eq-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;}
+.eq-lbl{font-size:10px;letter-spacing:3px;color:#1a2535;text-transform:uppercase;margin-bottom:6px;}
+.eq-val{font-family:'Cinzel',serif;font-size:30px;font-weight:700;color:#f0c060;}
+.eq-chg{font-size:12px;color:#00e5a0;margin-top:4px;letter-spacing:1px;}
+.eq-period{font-size:10px;letter-spacing:2px;color:#1a2535;text-align:right;}
+.eq-svg-wrap{height:110px;}
+.eq-svg{width:100%;height:100%;}
+.eq-foot{font-size:10px;letter-spacing:1px;color:#1a2030;text-align:center;margin-top:10px;}
+.benefits-bg{background-color:#080b10;border-top:1px solid #111622;}
+.benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background-color:#111622;border:1px solid #111622;border-radius:10px;overflow:hidden;margin-top:52px;}
+.benefit{background-color:#09090f;padding:34px 30px;transition:background-color 0.3s;display:flex;gap:16px;align-items:flex-start;}
+.benefit:hover{background-color:#0c1018;}
+.benefit-ico{font-size:26px;flex-shrink:0;margin-top:2px;}
+.benefit-title{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:#b0bac8;text-transform:uppercase;margin-bottom:7px;}
+.benefit-txt{font-size:13px;color:#2a3548;line-height:1.8;}
+.how-bg{background-color:#06080c;border-top:1px solid #111622;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:2px;background-color:#111622;border:1px solid #111622;border-radius:10px;overflow:hidden;margin-top:52px;}
+.step{background-color:#09090f;padding:40px 30px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;transition:background-color 0.3s;}
+.step:hover{background-color:#0c1018;}
+.step-ring{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;background-color:#06080c;}
+.s1 .step-ring{border:1px solid rgba(56,217,245,0.28);box-shadow:0 0 20px rgba(56,217,245,0.09);}
+.s2 .step-ring{border:1px solid rgba(201,146,42,0.28);box-shadow:0 0 20px rgba(201,146,42,0.09);}
+.s3 .step-ring{border:1px solid rgba(0,229,160,0.28);box-shadow:0 0 20px rgba(0,229,160,0.09);}
+.s4 .step-ring{border:1px solid rgba(159,122,234,0.28);box-shadow:0 0 20px rgba(159,122,234,0.09);}
+.step-n{font-family:'Cinzel',serif;font-size:22px;font-weight:900;}
+.s1 .step-n{color:#38d9f5;}.s2 .step-n{color:#f0c060;}.s3 .step-n{color:#00e5a0;}.s4 .step-n{color:#9f7aea;}
+.step-title{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:#b0b8c8;text-transform:uppercase;}
+.step-desc{font-size:13px;color:#2a3548;line-height:1.8;}
+.how-note{text-align:center;margin-top:24px;font-size:14px;color:#1a2535;letter-spacing:1px;font-style:italic;}
+.security-bg{background-color:#080b10;border-top:1px solid #111622;}
+.sec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:52px;}
+.sc-card{background-color:#09090f;border:1px solid #141826;border-radius:8px;padding:28px 26px;display:flex;gap:16px;align-items:flex-start;transition:all 0.3s;}
+.sc-card:hover{background-color:#0c1018;border-color:rgba(56,217,245,0.13);}
+.sc-ico{font-size:24px;flex-shrink:0;margin-top:2px;}
+.sc-title{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:#90a0b0;text-transform:uppercase;margin-bottom:6px;}
+.sc-txt{font-size:13px;color:#2a3548;line-height:1.75;}
+.advantage-bg{background-color:#06080c;border-top:1px solid #111622;}
+.adv-inner{max-width:820px;margin:0 auto;text-align:center;}
+.adv-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:36px;text-align:left;}
+.adv-item{display:flex;align-items:center;gap:12px;background-color:#09090f;border:1px solid #141826;border-radius:6px;padding:16px 18px;font-size:14px;color:#3a4870;transition:all 0.3s;}
+.adv-item:hover{border-color:rgba(201,146,42,0.2);color:#8090a8;}
+.adv-ck{color:#00e5a0;font-size:14px;flex-shrink:0;}
+.adv-warn{background-color:rgba(255,61,90,0.04);border:1px solid rgba(255,61,90,0.14);border-radius:8px;padding:22px 28px;font-size:16px;color:#4a3040;line-height:1.8;}
+.adv-warn strong{color:#ff3d5a;}
+.urgency-bg{background-color:#080408;border-top:1px solid rgba(255,61,90,0.1);border-bottom:1px solid rgba(255,61,90,0.1);}
+.urgency{max-width:700px;margin:0 auto;padding:72px 40px;text-align:center;}
+.urgency-badge{display:inline-flex;align-items:center;gap:8px;background-color:rgba(255,61,90,0.07);border:1px solid rgba(255,61,90,0.2);border-radius:100px;padding:7px 20px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ff3d5a;margin-bottom:24px;}
+.urgency-dot{width:7px;height:7px;border-radius:50%;background-color:#ff3d5a;animation:blink 1.5s ease-in-out infinite;}
+.urgency-h{font-family:'Cinzel',serif;font-size:clamp(20px,4vw,30px);font-weight:700;color:#dde4f0;letter-spacing:1px;margin-bottom:12px;line-height:1.4;}
+.urgency-p{font-size:15px;color:#2a3548;line-height:1.8;}
+.pricing-bg{background-color:#080b10;border-top:1px solid #111622;padding:100px 40px;}
+.pricing-inner{max-width:1000px;margin:0 auto;text-align:center;}
+.pricing-note{font-size:12px;letter-spacing:2px;color:#1a2535;margin-top:12px;}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px;margin-top:64px;}
+.p-card{background-color:#09090f;border:1px solid #141826;border-radius:10px;padding:40px 30px;position:relative;text-align:left;transition:all 0.3s;}
+.p-card:hover{transform:translateY(-4px);box-shadow:0 24px 60px rgba(0,0,0,0.5);}
+.p-card.hot{border-color:rgba(201,146,42,0.4);background:linear-gradient(160deg,#09090f 0%,rgba(201,146,42,0.04) 100%);box-shadow:0 0 40px rgba(201,146,42,0.1);}
+.p-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#c9922a,#f0c060);color:#06080c;font-size:9px;font-weight:700;letter-spacing:2px;padding:4px 18px;border-radius:100px;white-space:nowrap;}
+.p-plan{font-family:'Cinzel',serif;font-size:12px;letter-spacing:4px;color:#2a3548;text-transform:uppercase;margin-bottom:20px;}
+.p-amount{font-family:'Cinzel',serif;font-size:56px;font-weight:900;color:#e8ecf4;line-height:1;margin-bottom:4px;}
+.p-amount sup{font-size:22px;color:#3a4555;vertical-align:top;margin-top:12px;display:inline-block;}
+.p-period{font-size:12px;color:#2a3548;margin-bottom:28px;letter-spacing:1px;}
+.p-div{height:1px;background-color:#141826;margin-bottom:24px;}
+.p-feat{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;font-size:13px;color:#3a4860;line-height:1.5;}
+.pck{color:#00e5a0;font-size:12px;flex-shrink:0;margin-top:2px;}
+.pno{color:#1e2838;font-size:12px;flex-shrink:0;margin-top:2px;}
+.p-cta{display:block;width:100%;margin-top:30px;padding:15px;border-radius:5px;text-align:center;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;text-decoration:none;cursor:pointer;border:none;transition:all 0.3s;}
+.cta-g{background:linear-gradient(135deg,#c9922a,#f0c060);color:#06080c;box-shadow:0 0 24px rgba(201,146,42,0.28);}
+.cta-g:hover{box-shadow:0 0 44px rgba(201,146,42,0.45);transform:translateY(-1px);}
+.cta-o{background:transparent;border:1px solid #141826;color:#2a3548;}
+.cta-o:hover{border-color:rgba(201,146,42,0.3);color:#f0c060;}
+.instruments{text-align:center;margin-top:40px;padding-top:28px;border-top:1px solid #141826;font-size:12px;letter-spacing:2px;color:#1a2535;}
+.final-bg{background-color:#06080c;border-top:1px solid rgba(201,146,42,0.1);}
+.final{max-width:860px;margin:0 auto;padding:100px 40px;text-align:center;}
+.final-seal{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,rgba(201,146,42,0.15),rgba(6,8,12,0.9));border:2px solid rgba(201,146,42,0.35);box-shadow:0 0 40px rgba(201,146,42,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;margin:0 auto 32px;}
+.final-seal-leo{font-size:26px;color:#c9922a;}
+.final-seal-txt{font-family:'Cinzel',serif;font-size:14px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#f0c060,#c9922a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.final-h{font-family:'Cinzel',serif;font-size:clamp(22px,5vw,38px);font-weight:700;color:#dde4f0;line-height:1.4;margin-bottom:12px;letter-spacing:1px;}
+.final-h em{font-style:normal;background:linear-gradient(135deg,#f0c060,#c9922a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.final-p{font-size:16px;color:#2a3548;margin-bottom:44px;line-height:1.8;}
+.final-note{margin-top:16px;font-size:11px;color:#1a2535;letter-spacing:1px;}
+footer{padding:52px 40px;border-top:1px solid #111622;background-color:#06080c;text-align:center;}
+.ft-seal{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(201,146,42,0.1),rgba(6,8,12,0.9));border:1px solid rgba(201,146,42,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:22px;color:#c9922a;opacity:0.7;}
+.ft-brand{font-family:'Cinzel',serif;font-size:18px;font-weight:900;letter-spacing:7px;background:linear-gradient(135deg,#f0c060,#c9922a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+.ft-tag{font-size:10px;letter-spacing:4px;color:#1a2535;text-transform:uppercase;margin-bottom:32px;}
+.ft-links{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-bottom:28px;}
+.ft-links a{font-size:10px;letter-spacing:2px;color:#1a2535;text-decoration:none;text-transform:uppercase;transition:color 0.3s;}
+.ft-links a:hover{color:#f0c060;}
+.ft-copy{font-size:10px;color:#141826;letter-spacing:1px;line-height:1.8;}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.75s ease,transform 0.75s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-leo">♌</div>
+    <div>
+      <div class="nav-brand">DRG</div>
+      <div class="nav-cap">Execution</div>
+    </div>
+  </div>
+  <ul>
+    <li><a href="#results">Resultados</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Precios</a></li>
+    <li><a href="#pricing" class="nav-btn">Activar Dashboard</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="glow-top"></div>
+  <div class="glow-l"></div>
+  <div class="glow-r"></div>
+  <div class="hero-inner">
+    <div class="badge"><span class="bdot"></span>Plataforma activa · Traders en vivo</div>
+    <div class="hero-seal">
+      <div class="seal-leo">♌</div>
+      <div class="seal-drg">DRG</div>
+      <div class="seal-cap">Execution</div>
+    </div>
+    <h1 class="hero-hook">Deja de ejecutar manual.</h1>
+    <div class="hero-hook2">Ejecuta como un trader institucional — en segundos.</div>
+    <div class="gold-rule"></div>
+    <p class="hero-desc">Conecta tu cuenta de <strong>Topstep, Apex, Tradeify o Tradovate</strong> y opera con ejecución profesional, break even automático, trailing inteligente y estrategia DRG integrada. <strong>Todo desde un solo dashboard.</strong></p>
+    <div class="cta-row">
+      <a href="#pricing" class="btn-gold">⚡ ACTIVAR MI DASHBOARD</a>
+      <a href="#results" class="btn-ghost">Ver Resultados Reales →</a>
+    </div>
+    <p class="cta-note">Sin contratos · Cancela cuando quieras · Activo en menos de 2 minutos</p>
+    <div class="stats-bar">
+      <div class="stat"><div class="sv">1-CLIC</div><div class="sl">Ejecución</div></div>
+      <div class="stat"><div class="sv">AUTO</div><div class="sl">Trailing Stop</div></div>
+      <div class="stat"><div class="sv">5+</div><div class="sl">Firmas Prop</div></div>
+      <div class="stat"><div class="sv">&lt;2 MIN</div><div class="sl">Para activar</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="brokers reveal">
+  <div class="brokers-lbl">Compatible con las principales firmas prop del mercado</div>
+  <div class="b-row">
+    <div class="bchip on">Topstep</div><div class="bchip on">Apex Trader</div>
+    <div class="bchip on">Tradeify</div><div class="bchip on">Tradovate</div>
+    <div class="bchip">FTMO</div><div class="bchip">Take Profit Trader</div>
+  </div>
+</div>
+
+<div class="results-bg" id="results">
+<div class="sec-wrap"><div class="sec-inner">
+  <div class="reveal">
+    <div class="sec-label green">Prueba Real</div>
+    <h2 class="sec-h">Resultados reales.<br><em>Ejecución real.</em></h2>
+    <p class="sec-p" style="margin-bottom:44px;">Operaciones ejecutadas con las herramientas del dashboard DRG. Esto no es teoría. Es ejecución en vivo.</p>
+  </div>
+  <div class="result-hero reveal">
+    <div class="result-big">+$840</div>
+    <div class="result-sub">Una sola sesión · MNQ · 3 contratos</div>
+    <div class="result-meta">
+      <div class="rmeta"><div class="rmeta-l">Instrumento</div><div class="rmeta-v">MNQ</div></div>
+      <div class="rmeta"><div class="rmeta-l">Contratos</div><div class="rmeta-v">3</div></div>
+      <div class="rmeta"><div class="rmeta-l">Entrada</div><div class="rmeta-v">19,821</div></div>
+      <div class="rmeta"><div class="rmeta-l">Salida</div><div class="rmeta-v">19,847</div></div>
+      <div class="rmeta"><div class="rmeta-l">Herramienta</div><div class="rmeta-v">Auto Trailing</div></div>
+    </div>
+    <div class="result-quote">"Gestionado con <strong>break even automático</strong> y <strong>trailing activo</strong>. Sin tocar la operación."</div>
+  </div>
+  <div class="tradelog reveal">
+    <div class="tlog-head"><div class="th">Fecha</div><div class="th">Instrumento</div><div class="th">Dirección</div><div class="th">Herramienta DRG</div><div class="th">Resultado</div></div>
+    <div class="tlog-row"><div class="td">Hoy 09:32</div><div class="td gold">MNQ</div><div class="td"><span class="dir-l">LONG</span></div><div class="td">Auto Trailing</div><div class="td g">+$480</div></div>
+    <div class="tlog-row"><div class="td">Ayer 10:14</div><div class="td gold">MNQ</div><div class="td"><span class="dir-s">SHORT</span></div><div class="td">Auto Break Even</div><div class="td g">+$360</div></div>
+    <div class="tlog-row"><div class="td">Lun 09:58</div><div class="td gold">MNQ</div><div class="td"><span class="dir-l">LONG</span></div><div class="td">Sniper DRG</div><div class="td g">+$760</div></div>
+    <div class="tlog-row"><div class="td">Vie 11:02</div><div class="td gold">MNQ</div><div class="td"><span class="dir-l">LONG</span></div><div class="td">Auto SL</div><div class="td r">-$120</div></div>
+    <div class="tlog-row"><div class="td">Jue 09:45</div><div class="td gold">MNQ</div><div class="td"><span class="dir-s">SHORT</span></div><div class="td">Sniper DRG</div><div class="td g">+$560</div></div>
+  </div>
+  <div class="equity reveal" style="margin-top:16px;">
+    <div class="eq-top">
+      <div><div class="eq-lbl">Balance · Últimos 10 días</div><div class="eq-val">$53,240</div><div class="eq-chg">▲ +$3,240 · +6.49% este mes</div></div>
+      <div><div class="eq-period">Topstep · MNQ · Cuenta $50K</div></div>
+    </div>
+    <div class="eq-svg-wrap">
+      <svg class="eq-svg" viewBox="0 0 800 110" preserveAspectRatio="none">
+        <line x1="0" y1="28" x2="800" y2="28" stroke="#141826" stroke-width="1"/>
+        <line x1="0" y1="56" x2="800" y2="56" stroke="#141826" stroke-width="1"/>
+        <line x1="0" y1="84" x2="800" y2="84" stroke="#141826" stroke-width="1"/>
+        <defs><linearGradient id="eg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00e5a0" stop-opacity="0.2"/><stop offset="100%" stop-color="#00e5a0" stop-opacity="0.01"/></linearGradient></defs>
+        <path d="M0,90 L80,84 L160,78 L240,74 L290,87 L360,66 L440,58 L520,50 L600,43 L680,34 L800,20 L800,110 L0,110 Z" fill="url(#eg)"/>
+        <path d="M0,90 L80,84 L160,78 L240,74 L290,87 L360,66 L440,58 L520,50 L600,43 L680,34 L800,20" fill="none" stroke="#00e5a0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="290" cy="87" r="4" fill="#ff3d5a" opacity="0.8"/>
+        <circle cx="800" cy="20" r="5" fill="#00e5a0"/>
+      </svg>
+    </div>
+    <div class="eq-foot">Curva de equity ilustrativa · Los resultados individuales varían</div>
+  </div>
+</div></div></div>
+
+<div class="benefits-bg" id="features">
+<div class="sec-wrap"><div class="sec-inner">
+  <div class="reveal">
+    <div class="sec-label gold">Ventaja Real</div>
+    <h2 class="sec-h">Ventaja real sobre<br><em>el trader promedio</em></h2>
+    <p class="sec-p" style="margin-bottom:0;">Todo lo que necesitas para operar con precisión quirúrgica — sin los errores que cuestan dinero.</p>
+  </div>
+  <div class="benefits-grid reveal">
+    <div class="benefit"><div class="benefit-ico">👁️</div><div><div class="benefit-title">Claridad total</div><div class="benefit-txt">Ves exactamente dónde entrar y salir — sin dudar. El dashboard elimina el ruido y te muestra solo lo que importa.</div></div></div>
+    <div class="benefit"><div class="benefit-ico">⚡</div><div><div class="benefit-title">Ejecución instantánea</div><div class="benefit-txt">El sistema ejecuta tu stop loss y take profit automáticamente. Configuras una vez, el sistema trabaja siempre.</div></div></div>
+    <div class="benefit"><div class="benefit-ico">🎯</div><div><div class="benefit-title">Break Even sin estrés</div><div class="benefit-txt">Elimina el riesgo con break even automático sin tocar la operación. Tu posición queda protegida sola.</div></div></div>
+    <div class="benefit"><div class="benefit-ico">🔁</div><div><div class="benefit-title">Trailing inteligente</div><div class="benefit-txt">Protege ganancias mientras el precio avanza. El sistema sigue el movimiento por ti, sin que lo toques.</div></div></div>
+    <div class="benefit"><div class="benefit-ico">⚡</div><div><div class="benefit-title">1 segundo, 1 clic</div><div class="benefit-txt">Ejecuta en menos de 1 segundo con un solo clic. Sin formularios, sin configuración en el momento.</div></div></div>
+    <div class="benefit"><div class="benefit-ico">🏦</div><div><div class="benefit-title">Lógica institucional</div><div class="benefit-txt">Opera con la lógica de traders institucionales — gestión de riesgo profesional disponible para cualquier trader.</div></div></div>
+  </div>
+</div></div></div>
+
+<div class="how-bg">
+<div class="sec-wrap"><div class="sec-inner">
+  <div class="reveal" style="text-align:center;">
+    <div class="sec-label" style="justify-content:center;">Proceso</div>
+    <h2 class="sec-h" style="text-align:center;">Empieza en menos de <em>2 minutos</em></h2>
+  </div>
+  <div class="steps reveal">
+    <div class="step s1"><div class="step-ring"><span class="step-n">01</span></div><div class="step-title">Conecta tu cuenta</div><p class="step-desc">Topstep, Apex o Tradovate. Conexión encriptada en segundos.</p></div>
+    <div class="step s2"><div class="step-ring"><span class="step-n">02</span></div><div class="step-title">Configura tus reglas</div><p class="step-desc">SL, TP, break even, trailing. Lo configuras una vez.</p></div>
+    <div class="step s3"><div class="step-ring"><span class="step-n">03</span></div><div class="step-title">Ejecuta con 1 clic</div><p class="step-desc">Buy o Sell — la orden completa se envía al instante.</p></div>
+    <div class="step s4"><div class="step-ring"><span class="step-n">04</span></div><div class="step-title">El sistema gestiona</div><p class="step-desc">Break even y trailing trabajan solos. Tú decides cuándo entrar.</p></div>
+  </div>
+  <p class="how-note reveal">Sin complicaciones. Sin configuración avanzada.</p>
+</div></div></div>
+
+<div class="security-bg">
+<div class="sec-wrap"><div class="sec-inner">
+  <div class="reveal">
+    <div class="sec-label">Seguridad</div>
+    <h2 class="sec-h">Control total.<br><em>Sin intermediarios.</em></h2>
+    <p class="sec-p" style="margin-bottom:0;">Tu dinero, tu cuenta, tus decisiones. DRG Execution es solo la herramienta.</p>
+  </div>
+  <div class="sec-grid reveal">
+    <div class="sc-card"><div class="sc-ico">🔒</div><div><div class="sc-title">No tocamos tu dinero</div><div class="sc-txt">Tu capital permanece 100% en tu cuenta de fondeo. Nunca pasa por nosotros.</div></div></div>
+    <div class="sc-card"><div class="sc-ico">🚫</div><div><div class="sc-title">No operamos por ti</div><div class="sc-txt">Tú ejecutas cada trade. DRG Execution es tu herramienta, no tu operador.</div></div></div>
+    <div class="sc-card"><div class="sc-ico">🛡️</div><div><div class="sc-title">Conexión segura</div><div class="sc-txt">Conexión directa con Tradovate vía API oficial. Encriptada y certificada.</div></div></div>
+    <div class="sc-card"><div class="sc-ico">🏢</div><div><div class="sc-title">Para cuentas de fondeo</div><div class="sc-txt">Diseñado para operar en Topstep, Apex, Tradeify y similares.</div></div></div>
+  </div>
+</div></div></div>
+
+<div class="advantage-bg">
+<div class="sec-wrap"><div class="sec-inner">
+  <div class="adv-inner reveal">
+    <div class="sec-label" style="justify-content:center;">Ventaja DRG</div>
+    <h2 class="sec-h" style="text-align:center;">Esto no es<br><em>otra plataforma más.</em></h2>
+    <p style="font-family:'Cinzel',serif;font-size:clamp(16px,3vw,22px);color:#dde4f0;margin-bottom:36px;line-height:1.6;">Está diseñado para traders que quieren:</p>
+    <div class="adv-list">
+      <div class="adv-item"><span class="adv-ck">✓</span>Pasar cuentas de fondeo</div>
+      <div class="adv-item"><span class="adv-ck">✓</span>Eliminar errores manuales</div>
+      <div class="adv-item"><span class="adv-ck">✓</span>Ejecutar rápido sin dudar</div>
+      <div class="adv-item"><span class="adv-ck">✓</span>Operar con disciplina automática</div>
+    </div>
+    <div class="adv-warn">Si sigues operando manual...<br><strong>estás en desventaja.</strong></div>
+  </div>
+</div></div></div>
+
+<div class="urgency-bg">
+<div class="urgency reveal">
+  <div class="urgency-badge"><span class="urgency-dot"></span>Acceso Limitado</div>
+  <h2 class="urgency-h">Acceso limitado durante<br>fase inicial.</h2>
+  <p class="urgency-p">Solo para traders serios. Cupos disponibles limitados mientras la plataforma está en fase de lanzamiento.</p>
+</div>
+</div>
+
+<div class="pricing-bg" id="pricing">
+<div class="pricing-inner">
+  <div class="reveal">
+    <div class="sec-label" style="justify-content:center;">Planes</div>
+    <h2 class="sec-h" style="text-align:center;">Elige tu nivel de <em>ejecución</em></h2>
+    <p class="pricing-note">Sin contratos · Sin challenges · Cancela cuando quieras</p>
+  </div>
+  <div class="pricing-grid reveal">
+    <div class="p-card">
+      <div class="p-plan">Trader Básico</div>
+      <div class="p-amount"><sup>$</sup>29</div>
+      <div class="p-period">por mes</div>
+      <div class="p-div"></div>
+      <div class="p-feat"><span class="pck">✓</span>Dashboard con gráfico en vivo</div>
+      <div class="p-feat"><span class="pck">✓</span>Ejecución rápida 1 clic</div>
+      <div class="p-feat"><span class="pck">✓</span>Conexión Tradovate</div>
+      <div class="p-feat"><span class="pck">✓</span>Break Even automático</div>
+      <div class="p-feat"><span class="pno">✗</span><span style="color:#1e2838;">Trailing stop inteligente</span></div>
+      <div class="p-feat"><span class="pno">✗</span><span style="color:#1e2838;">Estrategia DRG integrada</span></div>
+      <button class="p-cta cta-o">Empezar</button>
+    </div>
+    <div class="p-card hot">
+      <div class="p-badge">RECOMENDADO</div>
+      <div class="p-plan">Trader Pro</div>
+      <div class="p-amount"><sup>$</sup>49</div>
+      <div class="p-period">por mes</div>
+      <div class="p-div"></div>
+      <div class="p-feat"><span class="pck">✓</span>Todo lo del plan básico</div>
+      <div class="p-feat"><span class="pck">✓</span>Trailing stop inteligente</div>
+      <div class="p-feat"><span class="pck">✓</span>Estrategia DRG integrada</div>
+      <div class="p-feat"><span class="pck">✓</span>Kill switch de emergencia</div>
+      <div class="p-feat"><span class="pck">✓</span>Alertas en tiempo real</div>
+      <button class="p-cta cta-g">⚡ ACTIVAR MI DASHBOARD</button>
+    </div>
+    <div class="p-card">
+      <div class="p-plan">Trader Elite</div>
+      <div class="p-amount"><sup>$</sup>99</div>
+      <div class="p-period">por mes</div>
+      <div class="p-div"></div>
+      <div class="p-feat"><span class="pck">✓</span>Todo lo del plan Pro</div>
+      <div class="p-feat"><span class="pck">✓</span>Todas las estrategias DRG</div>
+      <div class="p-feat"><span class="pck">✓</span>Alertas por WhatsApp</div>
+      <div class="p-feat"><span class="pck">✓</span>Sesiones de revisión 1:1</div>
+      <div class="p-feat"><span class="pck">✓</span>Acceso anticipado a nuevas funciones</div>
+      <button class="p-cta cta-o">Empezar</button>
+    </div>
+  </div>
+  <div class="instruments reveal">Diseñado para SPY · MNQ · NQ · Optimizado para cuentas de fondeo</div>
+</div>
+</div>
+
+<div class="final-bg">
+<div class="final reveal">
+  <div class="final-seal">
+    <div class="final-seal-leo">♌</div>
+    <div class="final-seal-txt">DRG</div>
+  </div>
+  <h2 class="final-h">¿Vas a seguir operando manual<br>o vas a <em>operar con ventaja</em>?</h2>
+  <p class="final-p">El mercado no espera. Cada operación manual es una oportunidad de cometer un error que el sistema hubiera evitado.</p>
+  <a href="#pricing" class="btn-gold" style="font-size:13px;padding:20px 52px;">⚡ ACTIVAR MI DASHBOARD AHORA</a>
+  <p class="final-note">Sin contratos · Cancela cuando quieras · Activo en menos de 2 minutos</p>
+</div>
+</div>
+
+<footer>
+  <div class="ft-seal">♌</div>
+  <div class="ft-brand">DRG EXECUTION</div>
+  <div class="ft-tag">Precision · Automation · Institutional Edge</div>
+  <div class="ft-links">
+    <a href="#">Inicio</a><a href="#results">Resultados</a>
+    <a href="#features">Features</a><a href="#pricing">Precios</a><a href="#">Contacto</a>
+  </div>
+  <div class="ft-copy">© 2026 DRG Execution · drgexecution.com · Todos los derechos reservados.<br>El trading de futuros involucra riesgo de pérdida. Los resultados pasados no garantizan resultados futuros.</div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}});});
+</script>
+</body>
+</html>
